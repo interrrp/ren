@@ -5,7 +5,6 @@ use wordlist::load_wordlists;
 
 mod check;
 mod cli;
-mod diff;
 mod iter;
 mod wordlist;
 

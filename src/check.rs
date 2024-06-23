@@ -1,6 +1,6 @@
+use crate::{iter::get_words_from_file, wordlist::Wordlist};
+use levenshtein::levenshtein as edit_distance;
 use std::path::Path;
-
-use crate::{diff::edit_distance, iter::get_words_from_file, wordlist::Wordlist};
 
 #[derive(Debug)]
 pub struct Suggestion {
