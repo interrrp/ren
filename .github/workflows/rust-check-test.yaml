@@ -1,4 +1,4 @@
-name: Run tests
+name: Check and test Rust code
 
 on: [push, pull_request]
 
