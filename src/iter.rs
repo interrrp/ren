@@ -58,6 +58,8 @@ pub fn get_words_from_str(s: &str) -> Vec<PositionedWord> {
 
 /// Get a list of words from a file.
 ///
+/// See `get_words_from_str` for more information.
+///
 /// # Arguments
 ///
 /// * `path` - A `std::path::Path` that holds the path to the file to read from.

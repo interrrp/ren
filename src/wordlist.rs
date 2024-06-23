@@ -7,29 +7,11 @@ pub struct Wordlist {
 }
 
 impl Wordlist {
-    /// Check if a wordlist contains a word.
-    ///
-    /// # Arguments
-    ///
-    /// * `word` - A string slice that holds the word to check for.
-    ///
-    /// # Returns
-    ///
-    /// A boolean that indicates if the wordlist contains the word.
     pub fn contains(&self, word: &str) -> bool {
         self.words.contains(&word.to_string())
     }
 }
 
-/// Load all wordlists by their language codes.
-///
-/// # Arguments
-///
-/// * `langs` - A vector of string slices that hold the language codes of the wordlists to load.
-///
-/// # Returns
-///
-/// A vector of `Wordlist`s that hold the words from the wordlists.
 pub fn load_wordlists(langs: Vec<String>) -> Vec<Wordlist> {
     langs.iter().map(|lang| load_wordlist(lang)).collect()
 }
