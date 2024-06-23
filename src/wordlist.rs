@@ -1,22 +1,22 @@
 use std::fs;
 
+#[derive(Debug)]
 pub struct Wordlist {
     pub lang: String,
     pub words: Vec<String>,
 }
 
-/// Load all wordlists from the `./wordlists` directory.
+/// Load all wordlists by their language codes.
 ///
-/// See `load_wordlist` for more information on how wordlists are loaded.
-pub fn load_all_wordlists() -> Vec<Wordlist> {
-    fs::read_dir("./wordlists")
-        .unwrap()
-        .map(|entry| {
-            let path = entry.unwrap().path();
-            let lang = path.file_stem().unwrap().to_str().unwrap();
-            load_wordlist(lang)
-        })
-        .collect()
+/// # Arguments
+///
+/// * `langs` - A vector of string slices that hold the language codes of the wordlists to load.
+///
+/// # Returns
+///
+/// A vector of `Wordlist`s that hold the words from the wordlists.
+pub fn load_wordlists(langs: Vec<String>) -> Vec<Wordlist> {
+    langs.iter().map(|lang| load_wordlist(lang)).collect()
 }
 
 /// Load a wordlist by its language code.
