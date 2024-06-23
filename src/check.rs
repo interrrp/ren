@@ -64,6 +64,13 @@ fn get_suggestions(misspelled_word: &str, wordlists: &Vec<Wordlist>) -> Vec<Sugg
 
     for wordlist in wordlists {
         for word in &wordlist.words {
+            // If the difference in length is greater than 5, we can assume
+            // the words are not similar enough to be suggestions.
+            let len_diff = (misspelled_word.len() as i32 - word.len() as i32).abs();
+            if len_diff > 5 {
+                continue;
+            }
+
             suggestions.push(Suggestion {
                 word: word.clone(),
                 lang: wordlist.lang.clone(),
