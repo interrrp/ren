@@ -70,6 +70,8 @@ fn get_suggestions(misspelled_word: &str, wordlists: &Vec<Wordlist>) -> Vec<Sugg
                 .words
                 .par_iter()
                 .filter(|word| {
+                    // Only consider words with a length difference of 5 or less
+                    // to reduce the number of comparisons
                     let len_diff = (misspelled_word.len() as i32 - word.len() as i32).abs();
                     len_diff <= 5
                 })
