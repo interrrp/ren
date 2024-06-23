@@ -26,3 +26,7 @@ Options:
   -l, --langs <LANGS>  The language codes of the wordlists to use for spell checking [default: en_us]
   -h, --help           Print help
 ```
+
+## License
+
+Ren is licensed under [GPLv3](./LICENSE).
