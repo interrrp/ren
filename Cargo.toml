@@ -7,3 +7,4 @@ edition = "2021"
 clap = { version = "4.5.7", features = ["derive"] }
 glob = "0.3.1"
 levenshtein = "1.0.5"
+rayon = "1.10.0"

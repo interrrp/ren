@@ -1,6 +1,9 @@
-use crate::{iter::get_words_from_file, wordlist::Wordlist};
-use levenshtein::levenshtein as edit_distance;
 use std::path::Path;
+
+use levenshtein::levenshtein as edit_distance;
+use rayon::prelude::*;
+
+use crate::{iter::get_words_from_file, wordlist::Wordlist};
 
 #[derive(Debug)]
 pub struct Suggestion {
@@ -60,25 +63,25 @@ pub fn spellcheck(path: &Path, wordlists: &Vec<Wordlist>) {
 /// A vector of `Suggestions` that hold the suggestions for the misspelled word
 /// sorted by edit distance.
 fn get_suggestions(misspelled_word: &str, wordlists: &Vec<Wordlist>) -> Vec<Suggestion> {
-    let mut suggestions = Vec::new();
+    let mut suggestions: Vec<Suggestion> = wordlists
+        .par_iter()
+        .flat_map(|wordlist| {
+            wordlist
+                .words
+                .par_iter()
+                .filter(|word| {
+                    let len_diff = (misspelled_word.len() as i32 - word.len() as i32).abs();
+                    len_diff <= 5
+                })
+                .map(|word| Suggestion {
+                    word: word.clone(),
+                    lang: wordlist.lang.clone(),
+                })
+                .collect::<Vec<Suggestion>>()
+        })
+        .collect();
 
-    for wordlist in wordlists {
-        for word in &wordlist.words {
-            // If the difference in length is greater than 5, we can assume
-            // the words are not similar enough to be suggestions.
-            let len_diff = (misspelled_word.len() as i32 - word.len() as i32).abs();
-            if len_diff > 5 {
-                continue;
-            }
-
-            suggestions.push(Suggestion {
-                word: word.clone(),
-                lang: wordlist.lang.clone(),
-            });
-        }
-    }
-
-    suggestions.sort_by(|a, b| {
+    suggestions.par_sort_by(|a, b| {
         let a_distance = edit_distance(misspelled_word, &a.word);
         let b_distance = edit_distance(misspelled_word, &b.word);
 
