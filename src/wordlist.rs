@@ -12,8 +12,8 @@ impl Wordlist {
     }
 }
 
-pub fn load_multiple(langs: &[String]) -> Vec<Wordlist> {
-    langs.iter().map(|lang| load(lang)).collect()
+pub fn load_wordlists(langs: &[String]) -> Vec<Wordlist> {
+    langs.iter().map(|lang| load_wordlist(lang)).collect()
 }
 
 /// Load a wordlist by its language code.
@@ -34,7 +34,8 @@ pub fn load_multiple(langs: &[String]) -> Vec<Wordlist> {
 /// # Panics
 ///
 /// This function will panic if the wordlist file cannot be read.
-pub fn load(lang: &str) -> Wordlist {
+#[allow(clippy::module_name_repetitions)]
+pub fn load_wordlist(lang: &str) -> Wordlist {
     let path = format!("./wordlists/{lang}.txt");
 
     let file = fs::read_to_string(path).unwrap_or_else(|_| panic!("Could not read wordlist file"));

@@ -8,7 +8,7 @@ use rayon::prelude::*;
 use ren::{
     iter::{get_words_from_file, PositionedWord},
     suggestion::{get_suggestions, Suggestion},
-    wordlist::{self, Wordlist},
+    wordlist::{load_wordlists, Wordlist},
 };
 
 mod cli;
@@ -16,7 +16,7 @@ mod cli;
 fn main() {
     let args = cli::Args::parse();
 
-    let wordlists = wordlist::load_multiple(&args.langs);
+    let wordlists = load_wordlists(&args.langs);
 
     let files = glob(&args.pattern).expect("Invalid glob pattern");
     files.par_bridge().for_each(|file| {
