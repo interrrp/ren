@@ -42,7 +42,7 @@ pub fn load(lang: &str) -> Wordlist {
     let words = file
         .lines()
         .filter(|line| !line.is_empty() && !line.starts_with("//"))
-        .map(ToString::to_string)
+        .map(str::to_string)
         .collect();
 
     Wordlist {
