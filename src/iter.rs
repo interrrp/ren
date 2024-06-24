@@ -45,6 +45,8 @@ pub fn get_words_from_str(s: &str) -> Vec<PositionedWord> {
 
             column = end_column + 1;
         }
+
+        column = 0;
     }
 
     words
