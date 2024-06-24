@@ -53,7 +53,7 @@ pub fn get_suggestions(misspelled_word: &str, wordlists: &[Wordlist]) -> Vec<Sug
         let a_distance = edit_distance(misspelled_word, &a.word);
         let b_distance = edit_distance(misspelled_word, &b.word);
 
-        b_distance.partial_cmp(&a_distance).unwrap()
+        a_distance.cmp(&b_distance)
     });
 
     suggestions

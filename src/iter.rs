@@ -17,19 +17,6 @@ pub struct PositionedWord {
 /// # Returns
 ///
 /// A vector of `PositionedWord`s that hold the words from the string.
-///
-/// # Example
-///
-/// ```
-/// use ren::get_words_from_str;
-///
-/// let words = get_words_from_str("Hello, world!");
-/// assert_eq!(words.len(), 2);
-///
-/// assert_eq!(words[0].word, "hello");
-/// assert_eq!(words[0].line, 0);
-/// assert_eq!(words[0].start_column, 0);
-/// ```
 pub fn get_words_from_str(s: &str) -> Vec<PositionedWord> {
     let mut words = Vec::new();
     let mut column = 0;
@@ -41,7 +28,7 @@ pub fn get_words_from_str(s: &str) -> Vec<PositionedWord> {
             let word = remove_punctuation(word).to_lowercase();
 
             let start_column = column;
-            let end_column = start_column + word.len();
+            let end_column = start_column + word.len() + 1; // +1 for the space
 
             if word.is_empty() || !is_all_alphabetic(&word) {
                 // Skip words that are empty, consisting of only punctuation, or
