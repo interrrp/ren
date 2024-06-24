@@ -38,7 +38,7 @@ pub fn get_words_from_str(s: &str) -> Vec<PositionedWord> {
         let line = i;
 
         for word in line_str.split_whitespace() {
-            let word = remove_punctuation(word);
+            let word = remove_punctuation(word).to_lowercase();
 
             let start_column = column;
             let end_column = start_column + word.len();
