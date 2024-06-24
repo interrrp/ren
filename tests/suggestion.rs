@@ -1,7 +1,7 @@
 use ren::{suggestion::get_suggestions, wordlist::Wordlist};
 
 #[test]
-fn test_get_suggestions() {
+fn best_suggestion() {
     let wordlists = vec![
         Wordlist {
             lang: "en".to_string(),
