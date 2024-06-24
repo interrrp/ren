@@ -1,6 +1,6 @@
 use std::{fs::read_to_string, path::Path};
 
-/// A struct that holds a word, line number, and column number.
+/// A struct that holds a word and its position in a larger string or text file.
 #[derive(Debug)]
 pub struct PositionedWord {
     pub word: String,
