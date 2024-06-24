@@ -26,7 +26,7 @@ pub struct PositionedWord {
 /// let words = get_words_from_str("Hello, world!");
 /// assert_eq!(words.len(), 2);
 ///
-/// assert_eq!(words[0].word, "Hello");
+/// assert_eq!(words[0].word, "hello");
 /// assert_eq!(words[0].line, 0);
 /// assert_eq!(words[0].start_column, 0);
 /// ```
