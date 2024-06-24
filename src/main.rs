@@ -2,6 +2,7 @@ use std::path::Path;
 
 use clap::Parser;
 use glob::glob;
+use rayon::prelude::*;
 
 use ren::{get_suggestions, get_words_from_file, load_wordlists, Wordlist};
 
@@ -13,10 +14,10 @@ fn main() {
     let wordlists = load_wordlists(args.langs);
 
     let files = glob(&args.pattern).expect("Invalid glob pattern");
-    for file in files {
+    files.par_bridge().for_each(|file| {
         let file = file.expect("Invalid file path");
         spellcheck(&file, &wordlists);
-    }
+    });
 }
 
 fn spellcheck(path: &Path, wordlists: &[Wordlist]) {
