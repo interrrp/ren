@@ -43,8 +43,9 @@ pub fn get_words_from_str(s: &str) -> Vec<PositionedWord> {
             let start_column = column;
             let end_column = start_column + word.len();
 
-            if word.is_empty() {
-                // Skip words that are made up of only punctuation
+            if word.is_empty() || !is_all_alphabetic(&word) {
+                // Skip words that are empty, consisting of only punctuation, or
+                // containing non-alphabetic characters.
                 column = end_column + 1;
                 continue;
             }
@@ -80,6 +81,10 @@ pub fn get_words_from_file(path: &Path) -> Vec<PositionedWord> {
     };
 
     get_words_from_str(&content)
+}
+
+fn is_all_alphabetic(s: &str) -> bool {
+    s.chars().all(|c| c.is_alphabetic())
 }
 
 fn remove_punctuation(s: &str) -> String {
