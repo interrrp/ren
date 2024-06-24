@@ -1,4 +1,4 @@
-use ren::get_words_from_str;
+use ren::iter::get_words_from_str;
 
 #[test]
 fn test_get_words_from_str() {
@@ -16,7 +16,7 @@ fn test_get_words_from_str() {
 
 #[test]
 fn test_filtering() {
-    let words = ren::get_words_from_str("Hello, world! https://google.com");
+    let words = get_words_from_str("Hello, world! https://google.com");
 
     assert_eq!(words.len(), 2);
     assert_eq!(words[0].word, "hello");

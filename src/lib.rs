@@ -1,7 +1,6 @@
-pub use iter::*;
-pub use suggestion::*;
-pub use wordlist::*;
+#![warn(clippy::all, clippy::pedantic)]
+#![allow(clippy::must_use_candidate)]
 
-mod iter;
-mod suggestion;
-mod wordlist;
+pub mod iter;
+pub mod suggestion;
+pub mod wordlist;

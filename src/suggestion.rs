@@ -1,7 +1,7 @@
 use levenshtein::levenshtein as edit_distance;
 use rayon::prelude::*;
 
-use crate::Wordlist;
+use crate::wordlist::Wordlist;
 
 /// A suggestion for a misspelled word.
 ///
@@ -38,7 +38,7 @@ pub fn get_suggestions(misspelled_word: &str, wordlists: &[Wordlist]) -> Vec<Sug
                 .filter(|word| {
                     // Only consider words with a length difference of 5 or less
                     // to reduce the number of comparisons
-                    let len_diff = (misspelled_word.len() as i32 - word.len() as i32).abs();
+                    let len_diff = misspelled_word.len().abs_diff(word.len());
                     len_diff <= 5
                 })
                 .map(|word| Suggestion {

@@ -12,8 +12,8 @@ impl Wordlist {
     }
 }
 
-pub fn load_wordlists(langs: Vec<String>) -> Vec<Wordlist> {
-    langs.iter().map(|lang| load_wordlist(lang)).collect()
+pub fn load_multiple(langs: &[String]) -> Vec<Wordlist> {
+    langs.iter().map(|lang| load(lang)).collect()
 }
 
 /// Load a wordlist by its language code.
@@ -30,18 +30,19 @@ pub fn load_wordlists(langs: Vec<String>) -> Vec<Wordlist> {
 /// # Returns
 ///
 /// A `Wordlist` that holds the words from the wordlist.
-pub fn load_wordlist(lang: &str) -> Wordlist {
-    let path = format!("./wordlists/{}.txt", lang);
+///
+/// # Panics
+///
+/// This function will panic if the wordlist file cannot be read.
+pub fn load(lang: &str) -> Wordlist {
+    let path = format!("./wordlists/{lang}.txt");
 
-    let file = match fs::read_to_string(path) {
-        Ok(file) => file,
-        Err(_) => panic!("Could not read wordlist file"),
-    };
+    let file = fs::read_to_string(path).unwrap_or_else(|_| panic!("Could not read wordlist file"));
 
     let words = file
         .lines()
         .filter(|line| !line.is_empty() && !line.starts_with("//"))
-        .map(|line| line.to_string())
+        .map(ToString::to_string)
         .collect();
 
     Wordlist {

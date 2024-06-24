@@ -6,7 +6,9 @@ use owo_colors::OwoColorize;
 use rayon::prelude::*;
 
 use ren::{
-    get_suggestions, get_words_from_file, load_wordlists, PositionedWord, Suggestion, Wordlist,
+    iter::{get_words_from_file, PositionedWord},
+    suggestion::{get_suggestions, Suggestion},
+    wordlist::{self, Wordlist},
 };
 
 mod cli;
@@ -14,7 +16,7 @@ mod cli;
 fn main() {
     let args = cli::Args::parse();
 
-    let wordlists = load_wordlists(args.langs);
+    let wordlists = wordlist::load_multiple(&args.langs);
 
     let files = glob(&args.pattern).expect("Invalid glob pattern");
     files.par_bridge().for_each(|file| {
@@ -34,16 +36,16 @@ fn spellcheck(path: &Path, wordlists: &[Wordlist]) {
 
         let suggestions = get_suggestions(&word, wordlists);
         let best_suggestion = suggestions.first();
-        print_colored_suggestion(path, word_with_pos, best_suggestion);
+        print_colored_suggestion(path, &word_with_pos, best_suggestion);
     }
 }
 
 fn print_colored_suggestion(
     path: &Path,
-    word_with_pos: PositionedWord,
+    word_with_pos: &PositionedWord,
     suggestion: Option<&Suggestion>,
 ) {
-    let colored_location = format!(
+    let location = format!(
         "{}:{}:{}",
         path.display(),
         word_with_pos.line + 1,
@@ -52,9 +54,9 @@ fn print_colored_suggestion(
     .bright_black()
     .to_string();
 
-    let colored_misspelled_word = word_with_pos.word.bright_red();
+    let misspelled_word = word_with_pos.word.bright_red();
 
-    let colored_suggestion = match suggestion {
+    let suggestion = match suggestion {
         Some(suggestion) => format!(
             "Did you mean {} {}?",
             suggestion.word.bright_green(),
@@ -63,8 +65,5 @@ fn print_colored_suggestion(
         None => "No suggestions found".bright_black().to_string(),
     };
 
-    println!(
-        "{}: {} is misspelled. {}",
-        colored_location, colored_misspelled_word, colored_suggestion
-    );
+    println!("{location}: {misspelled_word} is misspelled. {suggestion}");
 }

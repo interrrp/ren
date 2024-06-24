@@ -1,4 +1,4 @@
-use ren::{get_suggestions, Wordlist};
+use ren::{suggestion::get_suggestions, wordlist::Wordlist};
 
 #[test]
 fn test_get_suggestions() {

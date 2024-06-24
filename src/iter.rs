@@ -63,17 +63,17 @@ pub fn get_words_from_str(s: &str) -> Vec<PositionedWord> {
 /// # Returns
 ///
 /// A vector of `PositionedWord`s that hold the words from the file.
+///
+/// # Panics
+///
+/// This function will panic when the file cannot be read.
 pub fn get_words_from_file(path: &Path) -> Vec<PositionedWord> {
-    let content = match read_to_string(path) {
-        Ok(content) => content,
-        Err(_) => panic!("Could not read file"),
-    };
-
+    let content = read_to_string(path).expect("Could not read file");
     get_words_from_str(&content)
 }
 
 fn is_all_alphabetic(s: &str) -> bool {
-    s.chars().all(|c| c.is_alphabetic())
+    s.chars().all(char::is_alphabetic)
 }
 
 fn remove_punctuation(s: &str) -> String {
