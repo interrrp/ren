@@ -43,6 +43,12 @@ pub fn get_words_from_str(s: &str) -> Vec<PositionedWord> {
             let start_column = column;
             let end_column = start_column + word.len();
 
+            if word.is_empty() {
+                // Skip words that are made up of only punctuation
+                column = end_column + 1;
+                continue;
+            }
+
             words.push(PositionedWord {
                 word: word.to_string(),
                 line,
