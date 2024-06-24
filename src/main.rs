@@ -2,9 +2,12 @@ use std::path::Path;
 
 use clap::Parser;
 use glob::glob;
+use owo_colors::OwoColorize;
 use rayon::prelude::*;
 
-use ren::{get_suggestions, get_words_from_file, load_wordlists, Wordlist};
+use ren::{
+    get_suggestions, get_words_from_file, load_wordlists, PositionedWord, Suggestion, Wordlist,
+};
 
 mod cli;
 
@@ -31,18 +34,37 @@ fn spellcheck(path: &Path, wordlists: &[Wordlist]) {
 
         let suggestions = get_suggestions(&word, wordlists);
         let best_suggestion = suggestions.first();
-
-        eprintln!(
-            "{}:{}:{} - error: '{}' is misspelled. {}",
-            path.display(),
-            word_with_pos.line + 1,
-            word_with_pos.start_column + 1,
-            word_with_pos.word,
-            match best_suggestion {
-                Some(suggestion) =>
-                    format!("Did you mean '{}' ({})?", suggestion.word, suggestion.lang),
-                None => "No suggestions found.".to_string(),
-            }
-        );
+        print_colored_suggestion(path, word_with_pos, best_suggestion);
     }
+}
+
+fn print_colored_suggestion(
+    path: &Path,
+    word_with_pos: PositionedWord,
+    suggestion: Option<&Suggestion>,
+) {
+    let colored_location = format!(
+        "{}:{}:{}",
+        path.display(),
+        word_with_pos.line + 1,
+        word_with_pos.start_column + 1,
+    )
+    .bright_black()
+    .to_string();
+
+    let colored_misspelled_word = word_with_pos.word.bright_red();
+
+    let colored_suggestion = match suggestion {
+        Some(suggestion) => format!(
+            "Did you mean {} {}?",
+            suggestion.word.bright_green(),
+            format!("({})", suggestion.lang).bright_black(),
+        ),
+        None => "No suggestions found".bright_black().to_string(),
+    };
+
+    println!(
+        "{}: {} is misspelled. {}",
+        colored_location, colored_misspelled_word, colored_suggestion
+    );
 }

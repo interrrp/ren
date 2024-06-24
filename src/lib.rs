@@ -1,6 +1,6 @@
-pub use iter::{get_words_from_file, get_words_from_str};
-pub use suggestion::get_suggestions;
-pub use wordlist::{load_wordlist, load_wordlists, Wordlist};
+pub use iter::*;
+pub use suggestion::*;
+pub use wordlist::*;
 
 mod iter;
 mod suggestion;
