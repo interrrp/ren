@@ -83,7 +83,5 @@ pub fn get_words_from_file(path: &Path) -> Vec<PositionedWord> {
 }
 
 fn remove_punctuation(s: &str) -> String {
-    s.chars()
-        .filter(|c| c.is_alphabetic() || c.is_whitespace())
-        .collect()
+    s.trim_matches(|c: char| !c.is_alphanumeric()).to_string()
 }

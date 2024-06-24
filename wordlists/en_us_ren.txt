@@ -1023,9 +1023,7 @@ wordlists
 cd
 sh
 httpsgithubcominterrrpren
-// en_us
-enus
-gplvlicense
+en_us
 h
 l
 git
