@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: rustup toolchain install stable
+      - run: rustup toolchain install nightly
       - run: cargo check
       - run: cargo clippy
       - run: cargo test
