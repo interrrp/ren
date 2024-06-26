@@ -7,7 +7,7 @@ use crate::wordlist::Wordlist;
 ///
 /// This struct contains the suggested word and the language of the wordlist it
 /// was found in.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Suggestion {
     pub word: String,
     pub lang: String,
@@ -57,4 +57,22 @@ pub fn get_suggestions(misspelled_word: &str, wordlists: &[Wordlist]) -> Vec<Sug
     });
 
     suggestions
+}
+
+/// Get the best suggestion for a misspelled word.
+///
+/// This function is a convenience wrapper around `get_suggestions` that returns
+/// the first suggestion from the list of suggestions.
+///
+/// # Arguments
+///
+/// * `misspelled_word` - A string slice that holds the misspelled word.
+/// * `wordlists` - A vector of `Wordlist`s that hold the words to compare against.
+///
+/// # Returns
+///
+/// An `Option` that holds the best suggestion for the misspelled word.
+#[allow(clippy::module_name_repetitions)]
+pub fn get_best_suggestion(misspelled_word: &str, wordlists: &[Wordlist]) -> Option<Suggestion> {
+    get_suggestions(misspelled_word, wordlists).first().cloned()
 }

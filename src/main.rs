@@ -1,14 +1,13 @@
 use std::path::Path;
 
 use clap::Parser;
-use glob::glob;
 use owo_colors::OwoColorize;
 use rayon::prelude::*;
 
 use ren::{
     iter::{get_words_from_file, PositionedWord},
-    suggestion::{get_suggestions, Suggestion},
-    wordlist::{load_wordlists, Wordlist},
+    suggestion::{get_best_suggestion, Suggestion},
+    wordlist::Wordlist,
 };
 
 mod cli;
@@ -16,10 +15,9 @@ mod cli;
 fn main() {
     let args = cli::Args::parse();
 
-    let wordlists = load_wordlists(&args.langs);
+    let wordlists = args.get_wordlists();
 
-    let files = glob(&args.pattern).expect("Invalid glob pattern");
-    files.par_bridge().for_each(|file| {
+    args.get_matched_files().par_bridge().for_each(|file| {
         let file = file.expect("Invalid file path");
         spellcheck(&file, &wordlists);
     });
@@ -29,21 +27,19 @@ fn spellcheck(path: &Path, wordlists: &[Wordlist]) {
     for word_with_pos in get_words_from_file(path) {
         let word = word_with_pos.word.to_lowercase();
 
-        let spelled_correctly = wordlists.iter().any(|wordlist| wordlist.contains(&word));
-        if spelled_correctly {
+        if spelled_correctly(&word, wordlists) {
             continue;
         }
 
-        let suggestions = get_suggestions(&word, wordlists);
-        let best_suggestion = suggestions.first();
-        print_colored_suggestion(path, &word_with_pos, best_suggestion);
+        let best_suggestion = get_best_suggestion(&word, wordlists);
+        notify_misspelled_word(path, &word_with_pos, best_suggestion);
     }
 }
 
-fn print_colored_suggestion(
+fn notify_misspelled_word(
     path: &Path,
     word_with_pos: &PositionedWord,
-    suggestion: Option<&Suggestion>,
+    suggestion: Option<Suggestion>,
 ) {
     let location = format!(
         "{}:{}:{}",
@@ -66,4 +62,8 @@ fn print_colored_suggestion(
     };
 
     println!("{location}: {misspelled_word} is misspelled. {suggestion}");
+}
+
+fn spelled_correctly(word: &str, wordlists: &[Wordlist]) -> bool {
+    wordlists.iter().any(|wordlist| wordlist.contains(word))
 }
