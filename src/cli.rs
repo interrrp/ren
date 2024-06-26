@@ -2,7 +2,7 @@ use clap::Parser;
 
 /// A tiny spell checker.
 #[derive(Parser, Debug)]
-pub struct Args {
+pub(crate) struct Args {
     /// The glob pattern to search for files to spell check.
     #[arg(default_value = "**/*.md")]
     pub pattern: String,
