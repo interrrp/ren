@@ -8,6 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: rustup toolchain install nightly
+      - run: rustup component add --toolchain nightly clippy
       - run: cargo check
       - run: cargo clippy
       - run: cargo test
