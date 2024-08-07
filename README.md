@@ -1,8 +1,8 @@
-# Ren
+# ✏️ Ren
 
 > A tiny spellchecker.
 
-## Installation
+## ⬇️ Installation
 
 At the moment, you can only install Ren by source:
 
@@ -12,7 +12,7 @@ cd ren
 cargo install .
 ```
 
-## Usage
+## ⚙️ Usage
 
 Read the help text:
 
@@ -27,6 +27,6 @@ Options:
   -h, --help           Print help
 ```
 
-## License
+## 🔑 License
 
 Ren is licensed under [GPLv3](./LICENSE).
